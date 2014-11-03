@@ -1,19 +1,15 @@
 #!/usr/bin/env python
-"""Unit tests for the project1.authentcation module."""
+"""This module provides functions for authenticating users."""
 
-
-from unittest import TestCase
-from mock import patch
-import project1.authentication as auth
-
-
-class StandAloneTests(TestCase):
-    """Test the stand-alone module functions."""
-
-
-    @patch('__builtin__.open')
-    def test_login(self, mock_open):
-        """Test the login function."""
-        mock_open.return_value.read.return_value = \
-            "george|bosco\n"
-        self.assertTrue(auth.login('george', 'bosco'))
+def login(username, password):
+    try:
+        user_file = open('/etc/users.txt')    
+        user_buf = user_file.read()
+        users = [line.split("|") for line in user_buf.split("\n")]
+        if [username, password] in users:
+            return True
+        else:
+            return False
+    except Exception, exc:
+        print "I can't authenticate you."
+        return False
